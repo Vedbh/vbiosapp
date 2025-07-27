@@ -1,170 +1,18 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Lazy Eye Typing Focus Game</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      user-select: none;
-    }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VB - BGMI Pro Settings</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      background-color: #111;
-      color: white;
-      font-family: Arial, sans-serif;
-      overflow: hidden;
-    }
-
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      height: 100vh;
-    }
-
-    #textDisplay {
-      margin-top: 30px;
-      font-weight: bold;
-      text-align: center;
-      position: relative;
-      transition: all 0.3s ease;
-    }
-
-    #inputField {
-      padding: 10px;
-      font-size: 20px;
-      border-radius: 6px;
-      border: none;
-      outline: none;
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    #status {
-      margin-top: 10px;
-      font-size: 18px;
-      height: 24px;
-      color: yellow;
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background: lime;
-      color: black;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: green;
-      color: white;
-    }
-  </style>
 </head>
-<body>
+  <body>
   <div id="textDisplay">Loading...</div>
   <input type="text" id="inputField" autocomplete="off" />
   <div id="status"></div>
   <button onclick="restartGame()">Restart Game</button>
-
-  <script>
-    let currentString = '';
-    let attempts = 0;
-    const maxAttempts = 2;
-    let fontSize = 45;
-    const minFontSize = 10;
-    let yOffset = 30; // vertical position
-
-    const display = document.getElementById("textDisplay");
-    const input = document.getElementById("inputField");
-    const status = document.getElementById("status");
-
-    // Disable zooming
-    document.addEventListener('wheel', e => {
-      if (e.ctrlKey) e.preventDefault();
-    }, { passive: false });
-
-    document.addEventListener('keydown', e => {
-      if ((e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=')) || e.key === 'Meta') {
-        e.preventDefault();
-      }
-    });
-
-    function generateRandomString() {
-      const len = Math.floor(Math.random() * 9); // 0 to 8 letters
-      let str = '';
-      for (let i = 0; i < len; i++) {
-        const charCode = Math.floor(Math.random() * 26) + 65;
-        str += String.fromCharCode(charCode);
-      }
-      return str || 'A';
-    }
-
-    function updateDisplay() {
-      display.style.fontSize = fontSize + 'px';
-      display.textContent = currentString;
-      display.style.marginTop = yOffset + 'px';
-      input.value = '';
-      status.textContent = '';
-    }
-
-    function nextLevel() {
-      currentString = generateRandomString();
-      if (fontSize > minFontSize) fontSize--;
-      yOffset += 10; // Move display lower
-      updateDisplay();
-    }
-
-    function failAndRetry() {
-      currentString = generateRandomString();
-      updateDisplay(); // same size & yOffset
-    }
-
-    input.addEventListener("input", () => {
-      if (!currentString) return;
-      if (input.value === currentString) {
-        status.textContent = "✅ Correct!";
-        attempts = 0;
-        setTimeout(nextLevel, 800);
-      }
-    });
-
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        if (input.value !== currentString) {
-          attempts++;
-          if (attempts >= maxAttempts) {
-            status.textContent = "❌ 2 Attempts Failed! Restarting...";
-            setTimeout(() => {
-              restartGame();
-            }, 1200);
-          } else {
-            status.textContent = `❗ Wrong! Attempts left: ${maxAttempts - attempts}`;
-            setTimeout(() => {
-              failAndRetry(); // new string, same size
-            }, 700);
-          }
-        }
-      }
-    });
-
-    function restartGame() {
-      fontSize = 45;
-      yOffset = 30;
-      attempts = 0;
-      currentString = generateRandomString();
-      updateDisplay();
-    }
-
-    restartGame();
-    input.focus();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
